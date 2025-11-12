@@ -32,3 +32,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 });
 window.currentLang = ()=> localStorage.getItem('lang')||'fi';
+document.querySelector('.lang select').addEventListener('change', function() {
+  const newLang = this.value;
+  localStorage.setItem('lang', newLang);
+  applyAll(); // dil anında değişsin
+});
