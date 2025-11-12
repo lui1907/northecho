@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Shirts</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<div class="breadcrumbs"><a href="index.html">Home</a> / Shirts</div>
+<section class="card">
+  <div class="topbar">
+    <input type="search" id="q" placeholder="Search products…" oninput="renderCat()">
+    <select id="sort" onchange="renderCat()">
+      <option value="pop" data-i18n="sort_featured">Sort: Featured</option>
+      <option value="low" data-i18n="sort_low">Price: Low to High</option>
+      <option value="high" data-i18n="sort_high">Price: High to Low</option>
+    </select>
+  </div>
+</section>
+<section class="grid" id="grid"></section>
+<script>
+const CAT = "Shirts";
+function renderCat(){
+  const q = (document.getElementById('q').value||'').toLowerCase();
+  const sort = document.getElementById('sort').value;
+  let list = window.PRODUCTS[CAT].slice();
+  if(q) list = list.filter(p=> ((p.title[currentLang()]||p.title.en)||'').toLowerCase().includes(q));
+  if(sort==='low') list.sort((a,b)=>a.price-b.price);
+  if(sort==='high') list.sort((a,b)=>b.price-a.price);
+  const grid = document.getElementById('grid');
+  grid.innerHTML = list.map(p=>`
+    <a class="card product" href="product.html?id=${p.id}">
+      <div class="thumb">
+        <img src="${(p.images&&p.images[0])||''}" alt="${(p.title[currentLang()]||p.title.en)}">
+        <span>${(p.title[currentLang()]||p.title.en)}</span>
+      </div>
+      <div class="price">€ ${p.price}</div>
+      <div class="muted">Shirts</div>
+    </a>
+  `).join('');
+}
+renderCat();
+</script>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>

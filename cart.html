@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Cart</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<h2 data-i18n="nav_cart">Cart</h2>
+<section class="card">
+  <div id="cartBox"></div>
+  <div class="summary">
+    <div><span data-i18n="cart_subtotal">Subtotal</span>: <strong id="subtotal">€ 0</strong></div>
+    <div class="controls">
+      <a href="index.html" class="btn ghost" data-i18n="continue_shopping">Continue Shopping</a>
+      <a href="checkout.html" class="btn" data-i18n="cart_checkout">Checkout</a>
+    </div>
+  </div>
+</section>
+<script>
+function renderCart(){
+  const c = readCart();
+  const rows = Object.entries(c);
+  const box = document.getElementById('cartBox');
+  if(rows.length===0){ box.innerHTML='<p class="muted">'+t('cart_empty')+'</p>'; document.getElementById('subtotal').textContent='€ 0'; return; }
+  let html='', total=0;
+  for(const [id,qty] of rows){
+    let found=null, cat='';
+    for(const [k,list] of Object.entries(window.PRODUCTS)){ const f=list.find(x=>x.id===id); if(f){ found=f; cat=k; break; } }
+    if(!found) continue;
+    const line = found.price*qty; total+=line;
+    const title=(found.title[currentLang()]||found.title.en);
+    const img=(found.images&&found.images[0])||'';
+    html+=`
+      <div class="grid" style="grid-template-columns:80px 1fr 120px 120px 80px;align-items:center">
+        <div class="thumb"><img src="${img}" alt="${title}"></div>
+        <div>
+          <div style="font-weight:700">${title}</div>
+          <div class="muted">${cat}</div>
+        </div>
+        <div class="controls">
+          <button class="btn ghost" onclick="setQty('${id}', Math.max(1, (readCart()['${id}']||1)-1)); renderCart();">−</button>
+          <span>${qty}</span>
+          <button class="btn ghost" onclick="setQty('${id}', (readCart()['${id}']||1)+1); renderCart();">+</button>
+        </div>
+        <div>€ ${line}</div>
+        <button class="btn ghost" onclick="removeFromCart('${id}'); renderCart();">Remove</button>
+      </div>
+    `;
+  }
+  box.innerHTML=html;
+  document.getElementById('subtotal').textContent='€ '+total;
+  updateCartBadge();
+}
+renderCart();
+</script>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>

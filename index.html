@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Minimalistinen luksus</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<section class="hero">
+  <div class="card">
+    <h1 data-i18n="hero_title">North Echo · Minimal Luxury Apparel</h1>
+    <p class="muted" data-i18n="hero_sub">Designed in Finland. Premium silhouettes in black & neutral tones.</p>
+    <div class="controls">
+      <a class="btn" href="#categories" data-i18n="cta_shop">Shop Now</a>
+      <a class="btn ghost" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="card split">
+    <div class="badge">Free returns (14 days)</div>
+    <div class="badge">Finland delivery 1–3 days</div>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="card">
+    <div class="topbar" style="margin-bottom:10px"><strong data-i18n="categories">Categories</strong></div>
+    <div class="grid">
+      <a class="card product" href="sweaters.html">
+        <div class="thumb">
+          <img src="https://source.unsplash.com/featured/600x600/?sweater,black" alt="Sweaters">
+          <span>Sweaters</span>
+        </div>
+        <div class="muted">Merino, cashmere touch</div>
+      </a>
+      <a class="card product" href="shirts.html">
+        <div class="thumb">
+          <img src="https://source.unsplash.com/featured/600x600/?shirt,black" alt="Shirts">
+          <span>Shirts</span>
+        </div>
+        <div class="muted">Oxford, overshirt</div>
+      </a>
+      <a class="card product" href="tshirts.html">
+        <div class="thumb">
+          <img src="https://source.unsplash.com/featured/600x600/?tshirt,black" alt="T‑Shirts">
+          <span>T‑Shirts</span>
+        </div>
+        <div class="muted">Heavyweight, oversized</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="card" style="text-align:center">
+    <div class="about-logo">
+      <img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="North Echo logo">
+    </div>
+    <h3 data-i18n="about_title">About North Echo</h3>
+    <p class="muted" data-i18n="about_text">North Echo delivers minimalist, high‑quality apparel...</p>
+  </div>
+</section>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>

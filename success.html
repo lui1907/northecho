@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Order Received</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<section class="card">
+  <h2>Order Received</h2>
+  <p class="muted">Thank you — we will contact you via email to confirm. (Demo checkout complete.)</p>
+  <div id="orderBox" class="note"></div>
+  <div class="controls" style="margin-top:10px">
+    <a class="btn" href="index.html">Back to Home</a>
+    <a class="btn ghost" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</section>
+<script>
+try{
+  const order = JSON.parse(localStorage.getItem('ne_last_order')||'null');
+  const c = readCart();
+  if(order){
+    let lines = Object.entries(c).map(([id,qty])=> id+': '+qty).join(', ');
+    document.getElementById('orderBox').textContent = 'Order #' + order.ts + ' · Items: ' + lines;
+  }
+  localStorage.removeItem('ne_cart_v2');
+  updateCartBadge();
+}catch(e){}
+</script>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>

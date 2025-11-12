@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Product</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<div class="breadcrumbs"><a href="index.html">Home</a> / <span id="bcCat"></span> / <span id="bcTitle"></span></div>
+<section class="detail-hero">
+  <div class="card">
+    <div class="gallery">
+      <div class="big"><img id="imgBig" alt="" /></div>
+      <div class="small"><img id="imgSm1" alt="" /></div>
+      <div class="small"><img id="imgSm2" alt="" /></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 id="pTitle">Product</h2>
+    <div class="price" id="pPrice">€ 0</div>
+    <div class="controls" style="margin:10px 0">
+      <button class="btn" id="btnAdd" data-i18n="add_to_cart">Add to Cart</button>
+      <button class="btn ghost" id="btnBuy" data-i18n="buy_now">Buy Now</button>
+    </div>
+    <div class="line"></div>
+    <table class="table">
+      <tr><th>Description</th><td id="pDesc" class="muted"></td></tr>
+      <tr><th>Material & Care</th><td class="muted">Cotton / Wool blends. Machine wash cold or dry clean depending on label.</td></tr>
+      <tr><th>Shipping</th><td class="muted">Finland 1–3 business days.</td></tr>
+    </table>
+    <div style="margin-top:8px">
+      <a class="btn link" href="checkout.html" data-i18n="cart_checkout">Checkout</a>
+    </div>
+  </div>
+</section>
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get('id');
+let found=null, catName='';
+for(const [cat, list] of Object.entries(window.PRODUCTS)){ const f=list.find(x=>x.id===id); if(f){ found=f; catName=cat; break; } }
+if(!found){ document.body.innerHTML='<div class="container"><h2>Product not found.</h2></div>'; }
+else {
+  document.getElementById('bcCat').textContent = catName;
+  const title = found.title[currentLang()] || found.title.en;
+  document.getElementById('bcTitle').textContent = title;
+  document.getElementById('pTitle').textContent = title;
+  document.getElementById('pPrice').textContent = '€ ' + found.price;
+  document.getElementById('pDesc').textContent = found.desc[currentLang()] || found.desc.en;
+  const imgList = found.images||[];
+  document.getElementById('imgBig').src = imgList[0]||'';
+  document.getElementById('imgSm1').src = imgList[1]||imgList[0]||'';
+  document.getElementById('imgSm2').src = imgList[2]||imgList[0]||'';
+  document.getElementById('btnAdd').onclick=()=> addToCart(found.id,1);
+  document.getElementById('btnBuy').onclick=()=> { addToCart(found.id,1); location.href='cart.html'; };
+}
+</script>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>

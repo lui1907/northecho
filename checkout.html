@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>North Echo — Checkout</title>
+  <meta name="description" content="North Echo — Minimal luxury apparel." />
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="js/i18n.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <a class="logo" href="index.html"><img src="https://img.freepik.com/premium-vektor/ne-logo-vektoru_724449-198.jpg" alt="NE logo"></a>
+    <div>
+      <div style="font-weight:800">North Echo</div>
+      <div class="pill">Helsinki · Finland</div>
+    </div>
+  </div>
+  <nav class="topbar">
+    <a class="pill" href="#categories" data-i18n="nav_products">Products</a>
+    <a class="pill" href="https://www.instagram.com/northecho.fi/" target="_blank" rel="noopener" data-i18n="nav_instagram">Instagram</a>
+    <a class="pill" href="#about" data-i18n="nav_about">About Us</a>
+    <a class="btn" href="cart.html"><span data-i18n="nav_cart">Cart</span> (<span id="cartCount">0</span>)</a>
+    <div class="lang">
+      <select>
+        <option value="fi">Suomi</option>
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+  </nav>
+</header>
+<script>updateCartBadge();</script>
+
+<h2 data-i18n="checkout_title">Checkout</h2>
+<p class="muted" data-i18n="checkout_sub"></p>
+<section class="card">
+  <form id="checkoutForm" onsubmit="return goPay(event)" class="grid" style="grid-template-columns:1fr 1fr;gap:14px">
+    <div><label data-i18n="form_name"></label><br><input required id="name" placeholder="John Doe"></div>
+    <div><label data-i18n="form_email"></label><br><input required type="email" id="email" placeholder="you@example.com"></div>
+    <div style="grid-column:1/-1"><label data-i18n="form_address"></label><br><input required id="address" placeholder="Street, No, Apt"></div>
+    <div><label data-i18n="form_city"></label><br><input required id="city" placeholder="Helsinki"></div>
+    <div><label data-i18n="form_postal"></label><br><input required id="postal" placeholder="00100"></div>
+    <div><label data-i18n="form_country"></label><br><input required id="country" value="Finland"></div>
+    <div style="grid-column:1/-1" class="note">Email orders supported. <!-- TODO: put your order email inside goPay() if you want mailto fallback. --></div>
+    <div style="grid-column:1/-1" class="controls">
+      <button class="btn" type="submit" data-i18n="pay_now">Proceed to Payment</button>
+      <a class="btn ghost" href="cart.html" data-i18n="nav_cart">Cart</a>
+    </div>
+  </form>
+</section>
+<script>
+function goPay(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const address=document.getElementById('address').value.trim();
+  const city=document.getElementById('city').value.trim();
+  const postal=document.getElementById('postal').value.trim();
+  const country=document.getElementById('country').value.trim();
+  const items=readCart();
+  const order={name,email,address,city,postal,country,items,ts:Date.now()};
+  localStorage.setItem('ne_last_order', JSON.stringify(order));
+  const EMAIL=''; // TODO e.g. orders@northecho.fi
+  const orderLines = Object.entries(items).map(([id,qty])=>id+' x'+qty).join('%0A');
+  if(EMAIL){ window.open(`mailto:${EMAIL}?subject=New%20Order&body=Name:%20${encodeURIComponent(name)}%0AEmail:%20${encodeURIComponent(email)}%0AAddress:%20${encodeURIComponent(address)}%0A${encodeURIComponent(city)}%20${encodeURIComponent(postal)},%20${encodeURIComponent(country)}%0A%0AItems:%0A${orderLines}`); }
+  location.href='success.html';
+  return false;
+}
+</script>
+
+<footer id="footerNote"></footer>
+</div>
+<script>
+  document.getElementById('footerNote').textContent = t('footer_note');
+</script>
+</body>
+</html>
