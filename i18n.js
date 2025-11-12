@@ -1,4 +1,4 @@
-// 🌐 North Echo Language System (FI default, EN & TR)
+// 🌐 North Echo Language System (Fixed)
 window.I18N = {
   fi: {
     nav_products: "Tuotteet",
@@ -41,13 +41,14 @@ window.I18N = {
   }
 };
 
-// 🔁 Translation logic
+// 💬 Translation function
 function t(key) {
   const lang = localStorage.getItem("lang") || "fi";
   const dict = I18N[lang] || I18N.fi;
   return (dict[key] || key).replace("{year}", new Date().getFullYear());
 }
 
+// 🔁 Apply all translations
 function applyAll() {
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
@@ -55,13 +56,16 @@ function applyAll() {
   });
 }
 
-// 🌍 Language switcher
+// 🌍 Language setup (run after DOM fully loaded)
 document.addEventListener("DOMContentLoaded", () => {
   const sel = document.querySelector(".lang select");
-  const current = localStorage.getItem("lang") || "fi";
-  sel.value = current;
+  const savedLang = localStorage.getItem("lang") || "fi";
+
+  // Set initial value
+  sel.value = savedLang;
   applyAll();
 
+  // Change event
   sel.addEventListener("change", e => {
     const newLang = e.target.value;
     localStorage.setItem("lang", newLang);
